@@ -10,12 +10,28 @@
   <header class="topbar">
     <div class="brand">
       <p class="brand-title">Robloxian Franchise Network</p>
-      <p class="brand-subtitle">Firebase Write-Up Management System</p>
+      <p class="brand-subtitle">Write-Up Management Portal</p>
     </div>
-    <div class="badge" aria-live="polite"><span class="dot"></span><span id="whoText">Not signed in</span></div>
+    <div class="top-actions">
+      <div class="badge" aria-live="polite"><span class="dot"></span><span id="whoText">Not signed in</span></div>
+      <button class="secondary hidden" id="logoutBtn2" type="button">Sign out</button>
+    </div>
   </header>
 
   <main class="wrap">
+    <section class="hero" id="publicHero">
+      <div>
+        <p class="eyebrow">RFN Operations</p>
+        <h1>Discipline records, employee control, and oversight in one clean portal.</h1>
+        <p>Use Employee ID login, Firebase Authentication, one-time first access, and role-based write-up permissions.</p>
+      </div>
+      <div class="hero-panel">
+        <span>First login password</span>
+        <strong>RFN2026</strong>
+        <small>Users change it immediately after first sign-in.</small>
+      </div>
+    </section>
+
     <section id="setupNotice" class="notice hidden">
       <div>
         <h1>Initial system setup required</h1>
@@ -23,118 +39,178 @@
       </div>
     </section>
 
-    <div class="grid">
-      <aside class="left-stack">
-        <section class="card" id="loginCard">
-          <div class="card-hd"><h2>Secure sign in</h2></div>
-          <div class="card-bd">
-            <div class="hint"><span></span><p>Use your Employee ID and password. New accounts use the shared one-time password first, then create a permanent password.</p></div>
-            <label for="empId">Employee ID</label>
-            <input id="empId" placeholder="Enter your Employee ID" autocomplete="username" />
-            <label for="loginPass">Password / One-Time Password</label>
-            <input id="loginPass" type="password" placeholder="Enter password" autocomplete="current-password" />
-            <div class="actions"><button id="loginBtn" type="button">Sign in</button></div>
-            <p class="muted" id="loginMsg"></p>
-          </div>
-        </section>
-
-        <section class="card hidden" id="setupCard">
-          <div class="card-hd"><h2>Create first CEO</h2></div>
-          <div class="card-bd">
-            <label for="setupId">Employee ID</label>
-            <input id="setupId" placeholder="Example: CEO-001" />
-            <label for="setupName">Employee Name</label>
-            <input id="setupName" placeholder="Executive_Eagle" />
-            <label for="setupEmail">Fake Email</label>
-            <input id="setupEmail" placeholder="Automatically generated if blank" />
-            <div class="actions"><button id="setupBtn" type="button">Create CEO account</button></div>
-            <p class="muted" id="setupMsg"></p>
-          </div>
-        </section>
-
-        <section class="card hidden" id="employeeAdminCard">
-          <div class="card-hd"><h2>Employee management</h2></div>
-          <div class="card-bd">
-            <div class="hint"><span></span><p>CEO can add employees, change roles, and mark accounts Active, Inactive, or Terminated.</p></div>
-            <label for="adminEmpId">Employee ID</label>
-            <input id="adminEmpId" placeholder="Employee ID" />
-            <label for="adminName">Employee Name</label>
-            <input id="adminName" placeholder="Employee Name" />
-            <label for="adminEmail">Fake Email</label>
-            <input id="adminEmail" placeholder="Auto-generated if blank" />
-            <div class="row">
-              <div><label for="adminRole">Role</label><select id="adminRole"><option value="Employee">Employee</option><option value="DisciplinePerms">DisciplinePerms</option><option value="CEO">CEO</option></select></div>
-              <div><label for="adminStatus">Status</label><select id="adminStatus"><option value="Active">Active</option><option value="Inactive">Inactive</option><option value="Terminated">Terminated</option></select></div>
-            </div>
-            <div class="actions"><button class="ghost" id="adminClearBtn" type="button">Clear</button><button id="adminSaveBtn" type="button">Save employee</button></div>
-            <p class="muted" id="adminMsg"></p>
-            <div class="divider"></div>
-            <div class="toolbar-actions left"><button class="ghost" id="employeeRefreshBtn" type="button">Refresh employees</button></div>
-            <div class="employeeList" id="employeeList"></div>
-          </div>
-        </section>
-
-        <section class="card hidden" id="createCard">
-          <div class="card-hd"><h2>Create write-up</h2><button class="secondary" id="logoutBtn1" type="button">Sign out</button></div>
-          <div class="card-bd">
-            <div class="hint"><span></span><p>DisciplinePerms and CEO can create write-ups. CEO can edit and delete records.</p></div>
-            <label for="targetEmpId">Employee ID (Target)</label>
-            <input id="targetEmpId" placeholder="Employee ID" />
-            <label for="targetName">Employee Name</label>
-            <input id="targetName" placeholder="Employee Name" />
-            <div class="row">
-              <div><label for="writeUpDate">Date of Write-Up</label><input id="writeUpDate" type="date" /></div>
-              <div><label for="expiresMode">Duration / Expiration</label><select id="expiresMode"><option value="Never">Never</option><option value="ExpiresOn">Expires on date</option></select></div>
-            </div>
-            <label for="expiresOn">Expires on</label>
-            <input id="expiresOn" type="date" disabled />
-            <label for="reason">Reason for Write-Up</label>
-            <textarea id="reason" placeholder="Concise, factual, specific"></textarea>
-            <div class="actions"><button class="ghost" id="clearCreateBtn" type="button">Clear</button><button id="createBtn" type="button">Create write-up</button></div>
-            <p class="muted" id="createMsg"></p>
-          </div>
-        </section>
-      </aside>
-
-      <section class="card hidden" id="resultsCard">
-        <div class="card-hd"><h2>Write-ups</h2><button class="secondary" id="logoutBtn2" type="button">Sign out</button></div>
+    <section class="auth-shell" id="authShell">
+      <section class="card" id="loginCard">
+        <div class="card-hd"><h2>Secure sign in</h2></div>
         <div class="card-bd">
-          <div class="toolbar">
-            <div><label for="searchEmpId">Search by Employee ID</label><input id="searchEmpId" placeholder="Employee ID" /></div>
-            <div><label for="searchName">Search by Employee Name</label><input id="searchName" placeholder="Employee Name" /></div>
-            <div><label for="searchDate">Search by Write-Up Date</label><input id="searchDate" type="date" /></div>
-            <div class="toolbar-actions"><button class="ghost" id="refreshBtn" type="button">Refresh</button><button id="searchBtn" type="button">Search</button></div>
-          </div>
-          <p class="muted" id="diag"></p>
-          <div class="divider"></div>
-          <div class="resultsGrid">
-            <div><p class="tiny">Results</p><div class="list" id="list"></div></div>
-            <div>
-              <p class="tiny">Selected write-up</p>
-              <article class="detail-box">
-                <div class="detail-head"><h3>Details</h3><div><button class="ghost hidden" id="editBtn" type="button">Edit</button><button class="danger hidden" id="deleteBtn" type="button">Delete</button></div></div>
-                <p class="muted" id="detailMeta"></p>
-                <div class="kpiRow"><div class="kpi"><span>Employee</span><strong id="dEmp">—</strong></div><div class="kpi"><span>Write-Up Date</span><strong id="dDate">—</strong></div><div class="kpi"><span>WriteUp ID</span><strong id="dId">—</strong></div></div>
-                <div class="tagrow"><span class="tag" id="dExpiredTag">—</span><span class="pill" id="dExpires">—</span><span class="pill" id="dCreatedBy">—</span></div>
-                <label for="dReason">Reason</label><textarea id="dReason" disabled></textarea>
-                <p class="muted" id="readonlyNote">Edit and delete are restricted to CEO.</p>
-                <div class="divider hidden" id="editDivider"></div>
-                <div class="hidden" id="editPanel">
-                  <p class="tiny">Edit write-up (CEO)</p>
-                  <label for="eEmpId">Employee ID</label><input id="eEmpId" />
-                  <label for="eName">Employee Name</label><input id="eName" />
-                  <div class="row"><div><label for="eDate">Write-Up Date</label><input id="eDate" type="date" /></div><div><label for="eExpiresMode">Expires Mode</label><select id="eExpiresMode"><option value="Never">Never</option><option value="ExpiresOn">ExpiresOn</option></select></div></div>
-                  <label for="eExpiresOn">Expires On</label><input id="eExpiresOn" type="date" />
-                  <label for="eReason">Reason</label><textarea id="eReason"></textarea>
-                  <div class="actions"><button class="ghost" id="cancelEditBtn" type="button">Cancel</button><button id="saveEditBtn" type="button">Save changes</button></div>
-                  <p class="muted" id="editMsg"></p>
-                </div>
-              </article>
-            </div>
-          </div>
+          <div class="hint"><span></span><p>Use your Employee ID and password. New accounts use the shared one-time password first, then create a permanent password.</p></div>
+          <label for="empId">Employee ID</label>
+          <input id="empId" placeholder="Enter your Employee ID" autocomplete="username" />
+          <label for="loginPass">Password / One-Time Password</label>
+          <input id="loginPass" type="password" placeholder="Enter password" autocomplete="current-password" />
+          <div class="actions"><button id="loginBtn" type="button">Sign in</button></div>
+          <p class="muted" id="loginMsg"></p>
         </div>
       </section>
-    </div>
+
+      <section class="card hidden" id="setupCard">
+        <div class="card-hd"><h2>Create first CEO</h2></div>
+        <div class="card-bd">
+          <label for="setupId">Employee ID</label>
+          <input id="setupId" placeholder="Example: CEO-001" />
+          <label for="setupName">Employee Name</label>
+          <input id="setupName" placeholder="Executive_Eagle" />
+          <label for="setupEmail">Fake Email</label>
+          <input id="setupEmail" placeholder="Automatically generated if blank" />
+          <div class="actions"><button id="setupBtn" type="button">Create CEO account</button></div>
+          <p class="muted" id="setupMsg"></p>
+        </div>
+      </section>
+    </section>
+
+    <section class="portal hidden" id="portalShell">
+      <aside class="sidebar">
+        <div class="side-card">
+          <p class="side-label">Portal Navigation</p>
+          <button class="navBtn active" type="button" data-page="dashboardPage">Dashboard</button>
+          <button class="navBtn" type="button" data-page="writeupsPage">Write-Ups</button>
+          <button class="navBtn ceoOnly" type="button" data-page="employeesPage">Employees</button>
+          <button class="navBtn" type="button" data-page="accountPage">Account</button>
+        </div>
+      </aside>
+
+      <section class="pageArea">
+        <section class="portalPage" id="dashboardPage">
+          <div class="page-title">
+            <div><p class="eyebrow">Command Overview</p><h2>Dashboard</h2></div>
+            <button class="ghost" id="refreshDashboardBtn" type="button">Refresh data</button>
+          </div>
+          <div class="statGrid">
+            <article class="stat"><span>Total write-ups visible</span><strong id="statWriteups">—</strong></article>
+            <article class="stat"><span>Active write-ups</span><strong id="statActiveWriteups">—</strong></article>
+            <article class="stat"><span>Expired write-ups</span><strong id="statExpiredWriteups">—</strong></article>
+            <article class="stat"><span>Your role</span><strong id="statRole">—</strong></article>
+          </div>
+          <div class="card soft-card">
+            <div class="card-hd"><h2>Operational note</h2></div>
+            <div class="card-bd"><p class="muted">Employees see only their own write-ups. DisciplinePerms and CEO can view organization-wide write-ups. CEO can also manage employees and delete or edit records.</p></div>
+          </div>
+        </section>
+
+        <section class="portalPage hidden" id="writeupsPage">
+          <div class="page-title">
+            <div><p class="eyebrow">Case Records</p><h2>Write-Ups</h2></div>
+          </div>
+          <div class="split-layout">
+            <section class="card hidden" id="createCard">
+              <div class="card-hd"><h2>Create write-up</h2></div>
+              <div class="card-bd">
+                <div class="hint"><span></span><p>DisciplinePerms and CEO can create write-ups. CEO can edit and delete records.</p></div>
+                <label for="targetEmpId">Employee ID (Target)</label>
+                <input id="targetEmpId" placeholder="Employee ID" />
+                <label for="targetName">Employee Name</label>
+                <input id="targetName" placeholder="Employee Name" />
+                <div class="row">
+                  <div><label for="writeUpDate">Date of Write-Up</label><input id="writeUpDate" type="date" /></div>
+                  <div><label for="expiresMode">Duration / Expiration</label><select id="expiresMode"><option value="Never">Never</option><option value="ExpiresOn">Expires on date</option></select></div>
+                </div>
+                <label for="expiresOn">Expires on</label>
+                <input id="expiresOn" type="date" disabled />
+                <label for="reason">Reason for Write-Up</label>
+                <textarea id="reason" placeholder="Concise, factual, specific"></textarea>
+                <div class="actions"><button class="ghost" id="clearCreateBtn" type="button">Clear</button><button id="createBtn" type="button">Create write-up</button></div>
+                <p class="muted" id="createMsg"></p>
+              </div>
+            </section>
+
+            <section class="card" id="resultsCard">
+              <div class="card-hd"><h2>Records</h2></div>
+              <div class="card-bd">
+                <div class="toolbar">
+                  <div><label for="searchEmpId">Search by Employee ID</label><input id="searchEmpId" placeholder="Employee ID" /></div>
+                  <div><label for="searchName">Search by Employee Name</label><input id="searchName" placeholder="Employee Name" /></div>
+                  <div><label for="searchDate">Search by Write-Up Date</label><input id="searchDate" type="date" /></div>
+                  <div class="toolbar-actions"><button class="ghost" id="refreshBtn" type="button">Refresh</button><button id="searchBtn" type="button">Search</button></div>
+                </div>
+                <p class="muted" id="diag"></p>
+                <div class="divider"></div>
+                <div class="resultsGrid">
+                  <div><p class="tiny">Results</p><div class="list" id="list"></div></div>
+                  <div>
+                    <p class="tiny">Selected write-up</p>
+                    <article class="detail-box">
+                      <div class="detail-head"><h3>Details</h3><div><button class="ghost hidden" id="editBtn" type="button">Edit</button><button class="danger hidden" id="deleteBtn" type="button">Delete</button></div></div>
+                      <p class="muted" id="detailMeta"></p>
+                      <div class="kpiRow"><div class="kpi"><span>Employee</span><strong id="dEmp">—</strong></div><div class="kpi"><span>Write-Up Date</span><strong id="dDate">—</strong></div><div class="kpi"><span>WriteUp ID</span><strong id="dId">—</strong></div></div>
+                      <div class="tagrow"><span class="tag" id="dExpiredTag">—</span><span class="pill" id="dExpires">—</span><span class="pill" id="dCreatedBy">—</span></div>
+                      <label for="dReason">Reason</label><textarea id="dReason" disabled></textarea>
+                      <p class="muted" id="readonlyNote">Edit and delete are restricted to CEO.</p>
+                      <div class="divider hidden" id="editDivider"></div>
+                      <div class="hidden" id="editPanel">
+                        <p class="tiny">Edit write-up (CEO)</p>
+                        <label for="eEmpId">Employee ID</label><input id="eEmpId" />
+                        <label for="eName">Employee Name</label><input id="eName" />
+                        <div class="row"><div><label for="eDate">Write-Up Date</label><input id="eDate" type="date" /></div><div><label for="eExpiresMode">Expires Mode</label><select id="eExpiresMode"><option value="Never">Never</option><option value="ExpiresOn">ExpiresOn</option></select></div></div>
+                        <label for="eExpiresOn">Expires On</label><input id="eExpiresOn" type="date" />
+                        <label for="eReason">Reason</label><textarea id="eReason"></textarea>
+                        <div class="actions"><button class="ghost" id="cancelEditBtn" type="button">Cancel</button><button id="saveEditBtn" type="button">Save changes</button></div>
+                        <p class="muted" id="editMsg"></p>
+                      </div>
+                    </article>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="portalPage hidden" id="employeesPage">
+          <div class="page-title"><div><p class="eyebrow">CEO Controls</p><h2>Employees</h2></div></div>
+          <section class="card hidden" id="employeeAdminCard">
+            <div class="card-hd"><h2>Employee management</h2></div>
+            <div class="card-bd">
+              <div class="hint"><span></span><p>CEO can add employees, change roles, and mark accounts Active, Inactive, or Terminated.</p></div>
+              <div class="employee-admin-grid">
+                <div>
+                  <label for="adminEmpId">Employee ID</label>
+                  <input id="adminEmpId" placeholder="Employee ID" />
+                  <label for="adminName">Employee Name</label>
+                  <input id="adminName" placeholder="Employee Name" />
+                  <label for="adminEmail">Fake Email</label>
+                  <input id="adminEmail" placeholder="Auto-generated if blank" />
+                  <div class="row">
+                    <div><label for="adminRole">Role</label><select id="adminRole"><option value="Employee">Employee</option><option value="DisciplinePerms">DisciplinePerms</option><option value="CEO">CEO</option></select></div>
+                    <div><label for="adminStatus">Status</label><select id="adminStatus"><option value="Active">Active</option><option value="Inactive">Inactive</option><option value="Terminated">Terminated</option></select></div>
+                  </div>
+                  <div class="actions"><button class="ghost" id="adminClearBtn" type="button">Clear</button><button id="adminSaveBtn" type="button">Save employee</button></div>
+                  <p class="muted" id="adminMsg"></p>
+                </div>
+                <div>
+                  <div class="toolbar-actions left"><button class="ghost" id="employeeRefreshBtn" type="button">Refresh employees</button></div>
+                  <div class="employeeList" id="employeeList"></div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <section class="portalPage hidden" id="accountPage">
+          <div class="page-title"><div><p class="eyebrow">Session</p><h2>Account</h2></div></div>
+          <section class="card soft-card">
+            <div class="card-hd"><h2>Signed-in profile</h2></div>
+            <div class="card-bd">
+              <div class="statGrid accountStats">
+                <article class="stat"><span>Employee</span><strong id="accountName">—</strong></article>
+                <article class="stat"><span>Employee ID</span><strong id="accountId">—</strong></article>
+                <article class="stat"><span>Role</span><strong id="accountRole">—</strong></article>
+                <article class="stat"><span>Fake email</span><strong id="accountEmail">—</strong></article>
+              </div>
+              <div class="actions"><button class="secondary" id="logoutBtn1" type="button">Sign out</button></div>
+            </div>
+          </section>
+        </section>
+      </section>
+    </section>
   </main>
 
   <div class="modalOverlay hidden" id="passwordModal" role="dialog" aria-modal="true">
