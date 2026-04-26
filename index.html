@@ -73,7 +73,8 @@
         <div class="side-card">
           <p class="side-label">Portal Navigation</p>
           <button class="navBtn active" type="button" data-page="dashboardPage">Dashboard</button>
-          <button class="navBtn" type="button" data-page="writeupsPage">Write-Ups</button>
+          <button class="navBtn" type="button" data-page="createWriteupPage">Create Write-Up</button>
+          <button class="navBtn" type="button" data-page="recordsPage">Records</button>
           <button class="navBtn ceoOnly" type="button" data-page="employeesPage">Employees</button>
           <button class="navBtn" type="button" data-page="accountPage">Account</button>
         </div>
@@ -97,71 +98,79 @@
           </div>
         </section>
 
-        <section class="portalPage hidden" id="writeupsPage">
+        <section class="portalPage hidden" id="createWriteupPage">
           <div class="page-title">
-            <div><p class="eyebrow">Case Records</p><h2>Write-Ups</h2></div>
+            <div><p class="eyebrow">Case Intake</p><h2>Create Write-Up</h2></div>
           </div>
-          <div class="split-layout">
-            <section class="card hidden" id="createCard">
-              <div class="card-hd"><h2>Create write-up</h2></div>
-              <div class="card-bd">
-                <div class="hint"><span></span><p>DisciplinePerms and CEO can create write-ups. CEO can edit and delete records.</p></div>
-                <label for="targetEmpId">Employee ID (Target)</label>
-                <input id="targetEmpId" placeholder="Employee ID" />
-                <label for="targetName">Employee Name</label>
-                <input id="targetName" placeholder="Employee Name" />
-                <div class="row">
-                  <div><label for="writeUpDate">Date of Write-Up</label><input id="writeUpDate" type="date" /></div>
-                  <div><label for="expiresMode">Duration / Expiration</label><select id="expiresMode"><option value="Never">Never</option><option value="ExpiresOn">Expires on date</option></select></div>
+          <section class="card hidden clean-form-card" id="createCard">
+            <div class="card-hd"><h2>New write-up</h2></div>
+            <div class="card-bd">
+              <div class="hint"><span></span><p>DisciplinePerms and CEO can create write-ups. CEO can edit and delete records after creation.</p></div>
+              <div class="form-grid">
+                <div>
+                  <label for="targetEmpId">Employee ID (Target)</label>
+                  <input id="targetEmpId" placeholder="Employee ID" />
                 </div>
-                <label for="expiresOn">Expires on</label>
-                <input id="expiresOn" type="date" disabled />
-                <label for="reason">Reason for Write-Up</label>
-                <textarea id="reason" placeholder="Concise, factual, specific"></textarea>
-                <div class="actions"><button class="ghost" id="clearCreateBtn" type="button">Clear</button><button id="createBtn" type="button">Create write-up</button></div>
-                <p class="muted" id="createMsg"></p>
+                <div>
+                  <label for="targetName">Employee Name</label>
+                  <input id="targetName" placeholder="Employee Name" />
+                </div>
+                <div>
+                  <label for="writeUpDate">Date of Write-Up</label>
+                  <input id="writeUpDate" type="date" />
+                </div>
+                <div>
+                  <label for="expiresMode">Duration / Expiration</label>
+                  <select id="expiresMode"><option value="Never">Never</option><option value="ExpiresOn">Expires on date</option></select>
+                </div>
+                <div>
+                  <label for="expiresOn">Expires on</label>
+                  <input id="expiresOn" type="date" disabled />
+                </div>
               </div>
-            </section>
+              <label for="reason">Reason for Write-Up</label>
+              <textarea id="reason" placeholder="Concise, factual, specific"></textarea>
+              <div class="actions"><button class="ghost" id="clearCreateBtn" type="button">Clear</button><button id="createBtn" type="button">Create write-up</button></div>
+              <p class="muted" id="createMsg"></p>
+            </div>
+          </section>
+        </section>
 
-            <section class="card" id="resultsCard">
-              <div class="card-hd"><h2>Records</h2></div>
-              <div class="card-bd">
-                <div class="toolbar">
-                  <div><label for="searchEmpId">Search by Employee ID</label><input id="searchEmpId" placeholder="Employee ID" /></div>
-                  <div><label for="searchName">Search by Employee Name</label><input id="searchName" placeholder="Employee Name" /></div>
-                  <div><label for="searchDate">Search by Write-Up Date</label><input id="searchDate" type="date" /></div>
-                  <div class="toolbar-actions"><button class="ghost" id="refreshBtn" type="button">Refresh</button><button id="searchBtn" type="button">Search</button></div>
-                </div>
-                <p class="muted" id="diag"></p>
-                <div class="divider"></div>
-                <div class="resultsGrid">
-                  <div><p class="tiny">Results</p><div class="list" id="list"></div></div>
-                  <div>
-                    <p class="tiny">Selected write-up</p>
-                    <article class="detail-box">
-                      <div class="detail-head"><h3>Details</h3><div><button class="ghost hidden" id="editBtn" type="button">Edit</button><button class="danger hidden" id="deleteBtn" type="button">Delete</button></div></div>
-                      <p class="muted" id="detailMeta"></p>
-                      <div class="kpiRow"><div class="kpi"><span>Employee</span><strong id="dEmp">—</strong></div><div class="kpi"><span>Write-Up Date</span><strong id="dDate">—</strong></div><div class="kpi"><span>WriteUp ID</span><strong id="dId">—</strong></div></div>
-                      <div class="tagrow"><span class="tag" id="dExpiredTag">—</span><span class="pill" id="dExpires">—</span><span class="pill" id="dCreatedBy">—</span></div>
-                      <label for="dReason">Reason</label><textarea id="dReason" disabled></textarea>
-                      <p class="muted" id="readonlyNote">Edit and delete are restricted to CEO.</p>
-                      <div class="divider hidden" id="editDivider"></div>
-                      <div class="hidden" id="editPanel">
-                        <p class="tiny">Edit write-up (CEO)</p>
-                        <label for="eEmpId">Employee ID</label><input id="eEmpId" />
-                        <label for="eName">Employee Name</label><input id="eName" />
-                        <div class="row"><div><label for="eDate">Write-Up Date</label><input id="eDate" type="date" /></div><div><label for="eExpiresMode">Expires Mode</label><select id="eExpiresMode"><option value="Never">Never</option><option value="ExpiresOn">ExpiresOn</option></select></div></div>
-                        <label for="eExpiresOn">Expires On</label><input id="eExpiresOn" type="date" />
-                        <label for="eReason">Reason</label><textarea id="eReason"></textarea>
-                        <div class="actions"><button class="ghost" id="cancelEditBtn" type="button">Cancel</button><button id="saveEditBtn" type="button">Save changes</button></div>
-                        <p class="muted" id="editMsg"></p>
-                      </div>
-                    </article>
-                  </div>
-                </div>
-              </div>
-            </section>
+        <section class="portalPage hidden" id="recordsPage">
+          <div class="page-title">
+            <div><p class="eyebrow">Case Records</p><h2>Records</h2></div>
           </div>
+          <section class="card records-card" id="resultsCard">
+            <div class="card-hd"><h2>Write-up records</h2></div>
+            <div class="card-bd">
+              <div class="toolbar records-toolbar">
+                <div><label for="searchEmpId">Search by Employee ID</label><input id="searchEmpId" placeholder="Employee ID" /></div>
+                <div><label for="searchName">Search by Employee Name</label><input id="searchName" placeholder="Employee Name" /></div>
+                <div><label for="searchDate">Search by Write-Up Date</label><input id="searchDate" type="date" /></div>
+                <div class="toolbar-actions"><button class="ghost" id="refreshBtn" type="button">Refresh</button><button id="searchBtn" type="button">Search</button></div>
+              </div>
+              <p class="muted" id="diag"></p>
+              <div class="divider"></div>
+              <div class="records-layout">
+                <section>
+                  <p class="tiny">Results</p>
+                  <div class="list records-list" id="list"></div>
+                </section>
+                <section>
+                  <p class="tiny">Selected write-up</p>
+                  <article class="detail-box record-detail-box">
+                    <div class="detail-head"><h3>Details</h3><div><button class="ghost hidden" id="editBtn" type="button">Edit</button><button class="danger hidden" id="deleteBtn" type="button">Delete</button></div></div>
+                    <p class="muted" id="detailMeta"></p>
+                    <div class="kpiRow"><div class="kpi"><span>Employee</span><strong id="dEmp">—</strong></div><div class="kpi"><span>Write-Up Date</span><strong id="dDate">—</strong></div><div class="kpi"><span>WriteUp ID</span><strong id="dId">—</strong></div></div>
+                    <div class="tagrow"><span class="tag" id="dExpiredTag">—</span><span class="pill" id="dExpires">—</span><span class="pill" id="dCreatedBy">—</span></div>
+                    <label for="dReason">Reason</label><textarea id="dReason" disabled></textarea>
+                    <p class="muted" id="readonlyNote">Edit and delete are restricted to CEO.</p>
+                    <div class="divider hidden" id="editDivider"></div>
+                  </article>
+                </section>
+              </div>
+            </div>
+          </section>
         </section>
 
         <section class="portalPage hidden" id="employeesPage">
@@ -212,6 +221,22 @@
       </section>
     </section>
   </main>
+
+  <div class="modalOverlay hidden" id="editPanel" role="dialog" aria-modal="true">
+    <div class="modalCard wideModal">
+      <div class="modalTitleRow"><div><p class="eyebrow">CEO Edit</p><h2>Edit write-up</h2></div><button class="ghost" id="cancelEditBtn" type="button">Close</button></div>
+      <div class="form-grid">
+        <div><label for="eEmpId">Employee ID</label><input id="eEmpId" /></div>
+        <div><label for="eName">Employee Name</label><input id="eName" /></div>
+        <div><label for="eDate">Write-Up Date</label><input id="eDate" type="date" /></div>
+        <div><label for="eExpiresMode">Expires Mode</label><select id="eExpiresMode"><option value="Never">Never</option><option value="ExpiresOn">ExpiresOn</option></select></div>
+        <div><label for="eExpiresOn">Expires On</label><input id="eExpiresOn" type="date" /></div>
+      </div>
+      <label for="eReason">Reason</label><textarea id="eReason"></textarea>
+      <div class="actions"><button id="saveEditBtn" type="button">Save changes</button></div>
+      <p class="muted" id="editMsg"></p>
+    </div>
+  </div>
 
   <div class="modalOverlay hidden" id="passwordModal" role="dialog" aria-modal="true">
     <div class="modalCard">
