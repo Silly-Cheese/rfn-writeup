@@ -23,7 +23,7 @@
       <div>
         <p class="eyebrow">RFN Operations</p>
         <h1>Discipline records, employee control, and oversight in one clean portal.</h1>
-        <p>Use Employee ID login, Firebase Authentication, one-time first access, and role-based write-up permissions.</p>
+        <p>Use numeric Employee ID login, Firebase Authentication, one-time first access, and role-based write-up permissions.</p>
       </div>
       <div class="hero-panel">
         <span>First login password</span>
@@ -35,7 +35,7 @@
     <section id="setupNotice" class="notice hidden">
       <div>
         <h1>Initial system setup required</h1>
-        <p>No employee records were found. Create the first CEO account below. That CEO will sign in with the shared one-time password first, then create a permanent password.</p>
+        <p>No employee records were found. Create the first CEO account below using a numbers-only Employee ID.</p>
       </div>
     </section>
 
@@ -43,9 +43,9 @@
       <section class="card" id="loginCard">
         <div class="card-hd"><h2>Secure sign in</h2></div>
         <div class="card-bd">
-          <div class="hint"><span></span><p>Use your Employee ID and password. New accounts use the shared one-time password first, then create a permanent password.</p></div>
+          <div class="hint"><span></span><p>Use your numbers-only Employee ID and password. New accounts use the shared one-time password first, then create a permanent password.</p></div>
           <label for="empId">Employee ID</label>
-          <input id="empId" placeholder="Enter your Employee ID" autocomplete="username" />
+          <input id="empId" inputmode="numeric" pattern="[0-9]*" placeholder="Numbers only" autocomplete="username" />
           <label for="loginPass">Password / One-Time Password</label>
           <input id="loginPass" type="password" placeholder="Enter password" autocomplete="current-password" />
           <div class="actions"><button id="loginBtn" type="button">Sign in</button></div>
@@ -57,7 +57,7 @@
         <div class="card-hd"><h2>Create first CEO</h2></div>
         <div class="card-bd">
           <label for="setupId">Employee ID</label>
-          <input id="setupId" placeholder="Example: CEO-001" />
+          <input id="setupId" inputmode="numeric" pattern="[0-9]*" placeholder="Numbers only, example: 1001" />
           <label for="setupName">Employee Name</label>
           <input id="setupName" placeholder="Executive_Eagle" />
           <label for="setupEmail">Fake Email</label>
@@ -109,7 +109,7 @@
               <div class="form-grid">
                 <div>
                   <label for="targetEmpId">Employee ID (Target)</label>
-                  <input id="targetEmpId" placeholder="Employee ID" />
+                  <input id="targetEmpId" inputmode="numeric" pattern="[0-9]*" placeholder="Numbers only" />
                 </div>
                 <div>
                   <label for="targetName">Employee Name</label>
@@ -144,7 +144,7 @@
             <div class="card-hd"><h2>Write-up records</h2></div>
             <div class="card-bd">
               <div class="toolbar records-toolbar">
-                <div><label for="searchEmpId">Search by Employee ID</label><input id="searchEmpId" placeholder="Employee ID" /></div>
+                <div><label for="searchEmpId">Search by Employee ID</label><input id="searchEmpId" inputmode="numeric" pattern="[0-9]*" placeholder="Numbers only" /></div>
                 <div><label for="searchName">Search by Employee Name</label><input id="searchName" placeholder="Employee Name" /></div>
                 <div><label for="searchDate">Search by Write-Up Date</label><input id="searchDate" type="date" /></div>
                 <div class="toolbar-actions"><button class="ghost" id="refreshBtn" type="button">Refresh</button><button id="searchBtn" type="button">Search</button></div>
@@ -182,7 +182,7 @@
               <div class="employee-admin-grid">
                 <div>
                   <label for="adminEmpId">Employee ID</label>
-                  <input id="adminEmpId" placeholder="Employee ID" />
+                  <input id="adminEmpId" inputmode="numeric" pattern="[0-9]*" placeholder="Numbers only" />
                   <label for="adminName">Employee Name</label>
                   <input id="adminName" placeholder="Employee Name" />
                   <label for="adminEmail">Fake Email</label>
@@ -226,7 +226,7 @@
     <div class="modalCard wideModal">
       <div class="modalTitleRow"><div><p class="eyebrow">CEO Edit</p><h2>Edit write-up</h2></div><button class="ghost" id="cancelEditBtn" type="button">Close</button></div>
       <div class="form-grid">
-        <div><label for="eEmpId">Employee ID</label><input id="eEmpId" /></div>
+        <div><label for="eEmpId">Employee ID</label><input id="eEmpId" inputmode="numeric" pattern="[0-9]*" /></div>
         <div><label for="eName">Employee Name</label><input id="eName" /></div>
         <div><label for="eDate">Write-Up Date</label><input id="eDate" type="date" /></div>
         <div><label for="eExpiresMode">Expires Mode</label><select id="eExpiresMode"><option value="Never">Never</option><option value="ExpiresOn">ExpiresOn</option></select></div>
