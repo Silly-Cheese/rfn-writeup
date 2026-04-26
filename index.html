@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RFN — Write-Up System</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <p class="brand-title">Robloxian Franchise Network</p>
+      <p class="brand-subtitle">Firebase Write-Up Management System</p>
+    </div>
+    <div class="badge" aria-live="polite"><span class="dot"></span><span id="whoText">Not signed in</span></div>
+  </header>
+
+  <main class="wrap">
+    <section id="setupNotice" class="notice hidden">
+      <div>
+        <h1>Initial system setup required</h1>
+        <p>No employee records were found. Use the setup panel to create the first CEO account, then remove public write access in Firestore Rules before using this operationally.</p>
+      </div>
+    </section>
+
+    <div class="grid">
+      <aside class="left-stack">
+        <section class="card" id="loginCard">
+          <div class="card-hd"><h2>Secure sign in</h2></div>
+          <div class="card-bd">
+            <div class="hint"><span></span><p>Employee login uses Employee ID only. Role permissions are loaded from Firestore.</p></div>
+            <label for="empId">Employee ID</label>
+            <input id="empId" placeholder="Enter your Employee ID" autocomplete="username" />
+            <div class="actions"><button id="loginBtn" type="button">Sign in</button></div>
+            <p class="muted" id="loginMsg"></p>
+          </div>
+        </section>
+
+        <section class="card hidden" id="setupCard">
+          <div class="card-hd"><h2>Create first CEO</h2></div>
+          <div class="card-bd">
+            <label for="setupId">Employee ID</label>
+            <input id="setupId" placeholder="Example: CEO-001" />
+            <label for="setupName">Employee Name</label>
+            <input id="setupName" placeholder="Executive_Eagle" />
+            <div class="actions"><button id="setupBtn" type="button">Create CEO account</button></div>
+            <p class="muted" id="setupMsg"></p>
+          </div>
+        </section>
+
+        <section class="card hidden" id="createCard">
+          <div class="card-hd"><h2>Create write-up</h2><button class="secondary" id="logoutBtn1" type="button">Sign out</button></div>
+          <div class="card-bd">
+            <div class="hint"><span></span><p>DisciplinePerms and CEO can create write-ups. CEO can edit and delete records.</p></div>
+            <label for="targetEmpId">Employee ID (Target)</label>
+            <input id="targetEmpId" placeholder="Employee ID" />
+            <label for="targetName">Employee Name</label>
+            <input id="targetName" placeholder="Employee Name" />
+            <div class="row">
+              <div><label for="writeUpDate">Date of Write-Up</label><input id="writeUpDate" type="date" /></div>
+              <div><label for="expiresMode">Duration / Expiration</label><select id="expiresMode"><option value="Never">Never</option><option value="ExpiresOn">Expires on date</option></select></div>
+            </div>
+            <label for="expiresOn">Expires on</label>
+            <input id="expiresOn" type="date" disabled />
+            <label for="reason">Reason for Write-Up</label>
+            <textarea id="reason" placeholder="Concise, factual, specific"></textarea>
+            <div class="actions"><button class="ghost" id="clearCreateBtn" type="button">Clear</button><button id="createBtn" type="button">Create write-up</button></div>
+            <p class="muted" id="createMsg"></p>
+          </div>
+        </section>
+      </aside>
+
+      <section class="card hidden" id="resultsCard">
+        <div class="card-hd"><h2>Write-ups</h2><button class="secondary" id="logoutBtn2" type="button">Sign out</button></div>
+        <div class="card-bd">
+          <div class="toolbar">
+            <div><label for="searchEmpId">Search by Employee ID</label><input id="searchEmpId" placeholder="Employee ID" /></div>
+            <div><label for="searchName">Search by Employee Name</label><input id="searchName" placeholder="Employee Name" /></div>
+            <div><label for="searchDate">Search by Write-Up Date</label><input id="searchDate" type="date" /></div>
+            <div class="toolbar-actions"><button class="ghost" id="refreshBtn" type="button">Refresh</button><button id="searchBtn" type="button">Search</button></div>
+          </div>
+          <p class="muted" id="diag"></p>
+          <div class="divider"></div>
+          <div class="resultsGrid">
+            <div><p class="tiny">Results</p><div class="list" id="list"></div></div>
+            <div>
+              <p class="tiny">Selected write-up</p>
+              <article class="detail-box">
+                <div class="detail-head"><h3>Details</h3><div><button class="ghost hidden" id="editBtn" type="button">Edit</button><button class="danger hidden" id="deleteBtn" type="button">Delete</button></div></div>
+                <p class="muted" id="detailMeta"></p>
+                <div class="kpiRow"><div class="kpi"><span>Employee</span><strong id="dEmp">—</strong></div><div class="kpi"><span>Write-Up Date</span><strong id="dDate">—</strong></div><div class="kpi"><span>WriteUp ID</span><strong id="dId">—</strong></div></div>
+                <div class="tagrow"><span class="tag" id="dExpiredTag">—</span><span class="pill" id="dExpires">—</span><span class="pill" id="dCreatedBy">—</span></div>
+                <label for="dReason">Reason</label><textarea id="dReason" disabled></textarea>
+                <p class="muted" id="readonlyNote">Edit and delete are restricted to CEO.</p>
+                <div class="divider hidden" id="editDivider"></div>
+                <div class="hidden" id="editPanel">
+                  <p class="tiny">Edit write-up (CEO)</p>
+                  <label for="eEmpId">Employee ID</label><input id="eEmpId" />
+                  <label for="eName">Employee Name</label><input id="eName" />
+                  <div class="row"><div><label for="eDate">Write-Up Date</label><input id="eDate" type="date" /></div><div><label for="eExpiresMode">Expires Mode</label><select id="eExpiresMode"><option value="Never">Never</option><option value="ExpiresOn">ExpiresOn</option></select></div></div>
+                  <label for="eExpiresOn">Expires On</label><input id="eExpiresOn" type="date" />
+                  <label for="eReason">Reason</label><textarea id="eReason"></textarea>
+                  <div class="actions"><button class="ghost" id="cancelEditBtn" type="button">Cancel</button><button id="saveEditBtn" type="button">Save changes</button></div>
+                  <p class="muted" id="editMsg"></p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div class="toast" id="toast"><p id="toastT">Notice</p><span id="toastM"></span></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
