@@ -19,7 +19,7 @@
     <section id="setupNotice" class="notice hidden">
       <div>
         <h1>Initial system setup required</h1>
-        <p>No employee records were found. Use the setup panel to create the first CEO account, then remove public write access in Firestore Rules before using this operationally.</p>
+        <p>No employee records were found. Create the first CEO account below. That CEO will sign in with the shared one-time password first, then create a permanent password.</p>
       </div>
     </section>
 
@@ -28,9 +28,11 @@
         <section class="card" id="loginCard">
           <div class="card-hd"><h2>Secure sign in</h2></div>
           <div class="card-bd">
-            <div class="hint"><span></span><p>Employee login uses Employee ID only. Role permissions are loaded from Firestore.</p></div>
+            <div class="hint"><span></span><p>Use your Employee ID and password. New accounts use the shared one-time password first, then create a permanent password.</p></div>
             <label for="empId">Employee ID</label>
             <input id="empId" placeholder="Enter your Employee ID" autocomplete="username" />
+            <label for="loginPass">Password / One-Time Password</label>
+            <input id="loginPass" type="password" placeholder="Enter password" autocomplete="current-password" />
             <div class="actions"><button id="loginBtn" type="button">Sign in</button></div>
             <p class="muted" id="loginMsg"></p>
           </div>
@@ -43,8 +45,32 @@
             <input id="setupId" placeholder="Example: CEO-001" />
             <label for="setupName">Employee Name</label>
             <input id="setupName" placeholder="Executive_Eagle" />
+            <label for="setupEmail">Fake Email</label>
+            <input id="setupEmail" placeholder="Automatically generated if blank" />
             <div class="actions"><button id="setupBtn" type="button">Create CEO account</button></div>
             <p class="muted" id="setupMsg"></p>
+          </div>
+        </section>
+
+        <section class="card hidden" id="employeeAdminCard">
+          <div class="card-hd"><h2>Employee management</h2></div>
+          <div class="card-bd">
+            <div class="hint"><span></span><p>CEO can add employees, change roles, and mark accounts Active, Inactive, or Terminated.</p></div>
+            <label for="adminEmpId">Employee ID</label>
+            <input id="adminEmpId" placeholder="Employee ID" />
+            <label for="adminName">Employee Name</label>
+            <input id="adminName" placeholder="Employee Name" />
+            <label for="adminEmail">Fake Email</label>
+            <input id="adminEmail" placeholder="Auto-generated if blank" />
+            <div class="row">
+              <div><label for="adminRole">Role</label><select id="adminRole"><option value="Employee">Employee</option><option value="DisciplinePerms">DisciplinePerms</option><option value="CEO">CEO</option></select></div>
+              <div><label for="adminStatus">Status</label><select id="adminStatus"><option value="Active">Active</option><option value="Inactive">Inactive</option><option value="Terminated">Terminated</option></select></div>
+            </div>
+            <div class="actions"><button class="ghost" id="adminClearBtn" type="button">Clear</button><button id="adminSaveBtn" type="button">Save employee</button></div>
+            <p class="muted" id="adminMsg"></p>
+            <div class="divider"></div>
+            <div class="toolbar-actions left"><button class="ghost" id="employeeRefreshBtn" type="button">Refresh employees</button></div>
+            <div class="employeeList" id="employeeList"></div>
           </div>
         </section>
 
@@ -110,6 +136,19 @@
       </section>
     </div>
   </main>
+
+  <div class="modalOverlay hidden" id="passwordModal" role="dialog" aria-modal="true">
+    <div class="modalCard">
+      <h2>Create your permanent password</h2>
+      <p class="muted">Your one-time password was accepted. Create a new password before entering the system.</p>
+      <label for="newPass">New password</label>
+      <input id="newPass" type="password" autocomplete="new-password" />
+      <label for="confirmPass">Confirm password</label>
+      <input id="confirmPass" type="password" autocomplete="new-password" />
+      <div class="actions"><button id="setPasswordBtn" type="button">Save password</button></div>
+      <p class="muted" id="passwordMsg"></p>
+    </div>
+  </div>
 
   <div class="toast" id="toast"><p id="toastT">Notice</p><span id="toastM"></span></div>
   <script type="module" src="app.js"></script>
