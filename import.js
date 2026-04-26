@@ -1,6 +1,6 @@
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
-import { getFirestore, collection, doc, setDoc, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+import { getFirestore, collection, doc, setDoc, deleteDoc, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAhanBvRjSePaZpdAwQaXZhnk7zPqKB2fw",
@@ -187,6 +187,56 @@ async function importRows(){
   }
 }
 
+async function deleteSelectedEmployee(){
+  if(!isCEO()) return toast("Delete blocked", "Only CEO accounts can delete employees.");
+  if(!auth.currentUser) return toast("Delete blocked", "Please sign in again before deleting an employee.");
+  const employeeId = clean($("adminEmpId")?.value);
+  const employeeName = clean($("adminName")?.value);
+  if(!employeeId) return toast("Delete blocked", "Select an employee first.");
+  if(session()?.employeeId === employeeId){
+    return toast("Delete blocked", "You cannot delete your own active CEO account from this page.");
+  }
+  const confirmed = confirm(`Delete employee record?\n\nEmployee: ${employeeName || employeeId}\nEmployee ID: ${employeeId}\n\nThis removes their Firestore employee record and blocks normal Employee ID login. Existing write-up records will remain for history.`);
+  if(!confirmed) return;
+  const btn = $("deleteEmployeeBtn");
+  if(btn){ btn.disabled = true; btn.innerText = "Deleting..."; }
+  try{
+    await deleteDoc(doc(db, "employees", employeeId));
+    await addDoc(collection(db, "auditLogs"), {
+      timestamp: serverTimestamp(),
+      actorId: session()?.employeeId || auth.currentUser.uid,
+      actorRole: session()?.role || "",
+      action: "EMPLOYEE_DELETE",
+      targetEmployeeId: employeeId,
+      writeUpId: "",
+      details: `Deleted employee Firestore record for ${employeeName || employeeId}. Existing write-ups retained.`,
+      userAgent: navigator.userAgent || ""
+    });
+    $("adminClearBtn")?.click();
+    if($("employeeRefreshBtn")) $("employeeRefreshBtn").click();
+    const modal = $("employeeModal");
+    if(modal) modal.classList.add("hidden");
+    toast("Employee deleted", `${employeeName || employeeId} was removed from the employee system.`);
+  }catch(err){
+    toast("Delete failed", err.message || "Could not delete employee.");
+  }finally{
+    if(btn){ btn.disabled = false; btn.innerText = "Delete employee"; }
+  }
+}
+
+function injectEmployeeDeleteOption(){
+  if($("deleteEmployeeBtn")) return;
+  const saveBtn = $("adminSaveBtn");
+  if(!saveBtn) return;
+  const btn = document.createElement("button");
+  btn.id = "deleteEmployeeBtn";
+  btn.type = "button";
+  btn.className = "danger";
+  btn.textContent = "Delete employee";
+  saveBtn.parentElement?.insertBefore(btn, saveBtn);
+  btn.addEventListener("click", deleteSelectedEmployee);
+}
+
 function injectImportUI(){
   if($("importPage")) return;
   const side = document.querySelector(".side-card");
@@ -224,7 +274,7 @@ function injectImportUI(){
     </section>
   `;
   pageArea.appendChild(page);
-  document.head.insertAdjacentHTML("beforeend", `<style id="importStyles">.importTextarea{min-height:260px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.importExamples{border:1px solid rgba(15,23,42,.08);background:#fff;border-radius:16px;padding:12px;margin-top:10px}.importExamples p{margin:4px 0;color:var(--muted);font-size:12px}.importPreview{margin-top:14px;display:flex;flex-direction:column;gap:10px}.importPreviewItem{border:1px solid rgba(15,23,42,.10);border-radius:14px;padding:10px;background:#fff}.importPreviewItem strong{display:block;font-size:13px}.importPreviewItem span{display:block;color:var(--muted);font-size:12px;margin-top:4px}</style>`);
+  if(!$("importStyles")) document.head.insertAdjacentHTML("beforeend", `<style id="importStyles">.importTextarea{min-height:260px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.importExamples{border:1px solid rgba(15,23,42,.08);background:#fff;border-radius:16px;padding:12px;margin-top:10px}.importExamples p{margin:4px 0;color:var(--muted);font-size:12px}.importPreview{margin-top:14px;display:flex;flex-direction:column;gap:10px}.importPreviewItem{border:1px solid rgba(15,23,42,.10);border-radius:14px;padding:10px;background:#fff}.importPreviewItem strong{display:block;font-size:13px}.importPreviewItem span{display:block;color:var(--muted);font-size:12px;margin-top:4px}</style>`);
   $("previewImportBtn").addEventListener("click", previewRows);
   $("importBtn").addEventListener("click", importRows);
   $("importPaste").addEventListener("input", () => {
@@ -236,5 +286,9 @@ function injectImportUI(){
 
 window.addEventListener("DOMContentLoaded", () => {
   injectImportUI();
-  setInterval(injectImportUI, 1200);
+  injectEmployeeDeleteOption();
+  setInterval(() => {
+    injectImportUI();
+    injectEmployeeDeleteOption();
+  }, 1200);
 });
