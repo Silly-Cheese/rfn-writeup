@@ -8,7 +8,7 @@ This repository contains a GitHub Pages friendly Firebase Firestore version of t
 - `styles.css` — RFN navy/gold interface styling
 - `app.js` — Firebase and Firestore logic
 
-## Firestore collections used
+## Firestore collections useD
 
 The system automatically writes to these collections as records are created:
 
